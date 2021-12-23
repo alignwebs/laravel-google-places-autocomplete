@@ -1,0 +1,53 @@
+{
+    "name": "alignwebs/laravel-google-places-autocomplete",
+    "description": "Laravel wrapper for Google Places Autocomplete API",
+    "keywords": [
+        "alignwebs",
+        "laravel-google-places-autocomplete"
+    ],
+    "homepage": "https://github.com/alignwebs/laravel-google-places-autocomplete",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Gulzar Ahmed",
+            "email": "alignwebs@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alignwebs\\LaravelGooglePlacesAutocomplete\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alignwebs\\LaravelGooglePlacesAutocomplete\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Alignwebs\\LaravelGooglePlacesAutocomplete\\LaravelGooglePlacesAutocompleteServiceProvider"
+            ],
+            "aliases": {
+                "LaravelGooglePlacesAutocomplete": "Alignwebs\\LaravelGooglePlacesAutocomplete\\LaravelGooglePlacesAutocompleteFacade"
+            }
+        }
+    }
+}
