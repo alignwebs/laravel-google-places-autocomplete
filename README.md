@@ -1,7 +1,10 @@
 # Laravel Google Places Autocomplete
 Laravel wrapper for Google Places Autocomplete API
 
-Example Code:
+## Installation
+`composer require alignwebs/laravel-google-places-autocomplete`
+
+## Example Code:
 ```
 <?php
 use Alignwebs\LaravelGooglePlacesAutocomplete\Services\GooglePlacesAutocomplete;
