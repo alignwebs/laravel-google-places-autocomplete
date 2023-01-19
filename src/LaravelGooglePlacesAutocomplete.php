@@ -3,7 +3,6 @@
 namespace Alignwebs\LaravelGooglePlacesAutocomplete;
 
 use Illuminate\Support\Facades\Http;
-use phpDocumentor\Reflection\Types\Null_;
 
 class LaravelGooglePlacesAutocomplete
 {
@@ -13,8 +12,8 @@ class LaravelGooglePlacesAutocomplete
     private $fields = ['description', 'place_id'];
     private ?array $location = null;
     private int|float|null $radius = null; // in meters
-    private string|null $googleStatus = null;
-    private string|null $googleErrorMessage = null;
+    private string|null $apiResponseStatus = null;
+    private string|null $apiResponseErrorMessage = null;
 
     public function __construct($gmapApiKey = null)
     {
@@ -56,24 +55,24 @@ class LaravelGooglePlacesAutocomplete
         return $this->radius;
     }
 
-    public function getGoogleStatus(): string|null
+    public function getApiResponseStatus(): string|null
     {
-        return $this->googleStatus;
+        return $this->apiResponseStatus;
     }
 
-    public function getGoogleErrorMessage(): string|null
+    public function getApiResponseErrorMessage(): string|null
     {
-        return $this->googleErrorMessage;
+        return $this->apiResponseErrorMessage;
     }
 
-    public function setGoogleStatus(string|null $google_status)
+    private function setApiResponseStatus(string $api_response_status)
     {
-        $this->googleStatus = $google_status;
+        $this->apiResponseStatus = $api_response_status;
     }
 
-    public function setGoogleErrorMessage(string|null $google_error_message)
+    private function setApiResponseErrorMessage(string $api_response_error_message)
     {
-        $this->googleErrorMessage = $google_error_message;
+        $this->apiResponseErrorMessage = $api_response_error_message;
     }
 
     public function search(string $query)
@@ -93,12 +92,13 @@ class LaravelGooglePlacesAutocomplete
         if ($response->failed()) {
             throw new \Exception('Google Places Autocomplete API call failed. Server Error: ' . $response->serverError() . ' | Client Error: ' . $response->clientError());
         }
+        
         $response = $response->json();
 
-        $this->setGoogleStatus($response['status']);
+        $this->setApiResponseStatus($response['status']);
 
-        if ($response['status'] != 'OK') {
-            $this->setGoogleErrorMessage($response['error_message']);
+        if (isset($response['error_message'])) {
+            $this->setApiResponseErrorMessage($response['error_message']);
         }
 
         $predictions = $response['predictions'];
