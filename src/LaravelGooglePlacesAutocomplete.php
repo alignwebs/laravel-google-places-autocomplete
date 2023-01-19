@@ -66,11 +66,17 @@ class LaravelGooglePlacesAutocomplete
         }
 
         $response = Http::get(self::GOOGLE_PLACES_AUTOCOMPLETE_API_URL, $payload);
+        
         if ($response->failed()) {
             throw new \Exception('Google Places Autocomplete API call failed. Server Error: ' . $response->serverError() . ' | Client Error: ' . $response->clientError());
         }
+        $response = $response->json();
 
-        $predictions = $response->json()['predictions'];
+        if ($response['status'] != 'OK') {
+            throw new \Exception('Google Places Autocomplete API call failed. Status: ' . $response['status'] . ' | Error Message: ' . $response['error_message']);
+        }
+
+        $predictions = $response['predictions'];
         $result = collect($predictions)->map(function ($prediction) {
             return collect($prediction)->only($this->fields)->all();
         });
