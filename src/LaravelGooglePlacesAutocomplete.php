@@ -11,6 +11,7 @@ class LaravelGooglePlacesAutocomplete
     private $gmapApiKey = '';
     private $fields = ['description', 'place_id'];
     private ?array $location = null;
+    private ?array $searchableCountries = null;
     private int|float|null $radius = null; // in meters
     private string|null $apiResponseStatus = null;
     private string|null $apiResponseErrorMessage = null;
@@ -43,6 +44,24 @@ class LaravelGooglePlacesAutocomplete
     public function getLocation(): ?array
     {
         return $this->location;
+    }
+
+    public function setSearchableCountries(array $countries)
+    {
+        if (count($countries) == 0) {
+            throw new \Exception("Searchable countries array can't be empty");
+        }
+
+        if (count($countries) > 5) {
+            throw new \Exception("Searchable countries array can't have more than 5 countries");
+        }
+
+        $this->searchableCountries = $countries;
+    }
+
+    public function getSearchableCountries(): ?array
+    {
+        return $this->searchableCountries;
     }
 
     public function setRadius(int|float $radius)
@@ -85,6 +104,10 @@ class LaravelGooglePlacesAutocomplete
         }
         if (!is_null($this->getRadius())) {
             $payload['radius'] = $this->getRadius();
+        }
+        if (!is_null($this->getSearchableCountries())) {
+            $searchableCountries = $this->getSearchableCountries();
+            $payload['components'] = 'country:' . implode('|country:', $searchableCountries);
         }
 
         $response = Http::get(self::GOOGLE_PLACES_AUTOCOMPLETE_API_URL, $payload);
