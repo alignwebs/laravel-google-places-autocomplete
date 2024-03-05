@@ -13,6 +13,7 @@ class LaravelGooglePlacesAutocomplete
     private ?array $location = null;
     private ?array $searchableCountries = null;
     private int|float|null $radius = null; // in meters
+    private string|null $language = null;
     private string|null $apiResponseStatus = null;
     private string|null $apiResponseErrorMessage = null;
 
@@ -57,6 +58,16 @@ class LaravelGooglePlacesAutocomplete
         }
 
         $this->searchableCountries = $countries;
+    }
+
+    public function setLanguage(string $language)
+    {
+        $this->language = $language;
+    }
+
+    public function getLanguage(): string|null
+    {
+        return $this->language;
     }
 
     public function getSearchableCountries(): ?array
@@ -109,13 +120,16 @@ class LaravelGooglePlacesAutocomplete
             $searchableCountries = $this->getSearchableCountries();
             $payload['components'] = 'country:' . implode('|country:', $searchableCountries);
         }
+        if (!is_null($this->getLanguage())) {
+            $payload['language'] = $this->getLanguage();
+        }
 
         $response = Http::get(self::GOOGLE_PLACES_AUTOCOMPLETE_API_URL, $payload);
 
         if ($response->failed()) {
             throw new \Exception('Google Places Autocomplete API call failed. Server Error: ' . $response->serverError() . ' | Client Error: ' . $response->clientError());
         }
-        
+
         $response = $response->json();
 
         $this->setApiResponseStatus($response['status']);
