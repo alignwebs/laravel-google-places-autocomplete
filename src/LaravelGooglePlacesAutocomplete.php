@@ -9,13 +9,20 @@ class LaravelGooglePlacesAutocomplete
     const GOOGLE_PLACES_AUTOCOMPLETE_API_URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
 
     private $gmapApiKey = '';
+
     private $fields = ['description', 'place_id'];
+
     private ?array $location = null;
+
     private ?array $searchableCountries = null;
+
     private int|float|null $radius = null; // in meters
-    private string|null $language = null;
-    private string|null $apiResponseStatus = null;
-    private string|null $apiResponseErrorMessage = null;
+
+    private ?string $language = null;
+
+    private ?string $apiResponseStatus = null;
+
+    private ?string $apiResponseErrorMessage = null;
 
     public function __construct($gmapApiKey = null)
     {
@@ -65,7 +72,7 @@ class LaravelGooglePlacesAutocomplete
         $this->language = $language;
     }
 
-    public function getLanguage(): string|null
+    public function getLanguage(): ?string
     {
         return $this->language;
     }
@@ -85,12 +92,12 @@ class LaravelGooglePlacesAutocomplete
         return $this->radius;
     }
 
-    public function getApiResponseStatus(): string|null
+    public function getApiResponseStatus(): ?string
     {
         return $this->apiResponseStatus;
     }
 
-    public function getApiResponseErrorMessage(): string|null
+    public function getApiResponseErrorMessage(): ?string
     {
         return $this->apiResponseErrorMessage;
     }
@@ -110,24 +117,24 @@ class LaravelGooglePlacesAutocomplete
         $payload['key'] = $this->gmapApiKey;
         $payload['input'] = $query;
 
-        if (!is_null($this->getLocation())) {
+        if (! is_null($this->getLocation())) {
             $payload['location'] = implode(',', $this->getLocation());
         }
-        if (!is_null($this->getRadius())) {
+        if (! is_null($this->getRadius())) {
             $payload['radius'] = $this->getRadius();
         }
-        if (!is_null($this->getSearchableCountries())) {
+        if (! is_null($this->getSearchableCountries())) {
             $searchableCountries = $this->getSearchableCountries();
-            $payload['components'] = 'country:' . implode('|country:', $searchableCountries);
+            $payload['components'] = 'country:'.implode('|country:', $searchableCountries);
         }
-        if (!is_null($this->getLanguage())) {
+        if (! is_null($this->getLanguage())) {
             $payload['language'] = $this->getLanguage();
         }
 
         $response = Http::get(self::GOOGLE_PLACES_AUTOCOMPLETE_API_URL, $payload);
 
         if ($response->failed()) {
-            throw new \Exception('Google Places Autocomplete API call failed. Server Error: ' . $response->serverError() . ' | Client Error: ' . $response->clientError());
+            throw new \Exception('Google Places Autocomplete API call failed. Server Error: '.$response->serverError().' | Client Error: '.$response->clientError());
         }
 
         $response = $response->json();

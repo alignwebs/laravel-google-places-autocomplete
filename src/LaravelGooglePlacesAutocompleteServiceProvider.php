@@ -13,7 +13,7 @@ class LaravelGooglePlacesAutocompleteServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('google-places-autocomplete.php'),
+                __DIR__.'/../config/config.php' => config_path('google-places-autocomplete.php'),
             ], 'config');
         }
     }
@@ -24,7 +24,7 @@ class LaravelGooglePlacesAutocompleteServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'google-places-autocomplete');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'google-places-autocomplete');
 
         // Register the main class to use with the facade
         $this->app->singleton('google-places-autocomplete', function () {

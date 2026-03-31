@@ -2,10 +2,11 @@
 
 namespace Alignwebs\LaravelGooglePlacesAutocomplete;
 
+use Alignwebs\LaravelGooglePlacesAutocomplete\Skeleton\SkeletonClass;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Alignwebs\LaravelGooglePlacesAutocomplete\Skeleton\SkeletonClass
+ * @see SkeletonClass
  */
 class LaravelGooglePlacesAutocompleteFacade extends Facade
 {
